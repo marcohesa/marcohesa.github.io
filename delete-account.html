@@ -1,24 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>BeStrong - Eliminar Cuenta</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BeStrong - Delete Account</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
     <style>
-        body { font-family: sans-serif; padding: 40px; line-height: 1.6; }
-        .container { max-width: 600px; margin: auto; }
-        h1 { color: #d32f2f; }
+        body {
+            font-family: 'Figtree', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .stepper {
+            display: flex;
+            flex-direction: column;
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .step-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            min-height: 80px;
+        }
+
+        .step-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .step-button {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .step-button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .step-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            gap: 5px;
+        }
+
+        .step-indicator div {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .step-indicator div.active {
+            background-color: #007bff;
+        }
+
+        .step-indicator div.completed {
+            background-color: #4caf50;
+        }
+
+        #lang-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Cómo eliminar tu cuenta de BeStrong</h1>
-        <p>Lamentamos que te vayas. Para eliminar tu cuenta y todos tus datos (rutinas, likes y perfil), sigue estos pasos:</p>
-        <ol>
-            <li>Abre la app <strong>BeStrong</strong>.</li>
-            <li>Ve a tu <strong>Perfil</strong>.</li>
-            <li>Selecciona <strong>Configuración</strong>.</li>
-            <li>Toca en <strong>"Eliminar cuenta"</strong> y confirma la acción.</li>
-        </ol>
-        <p><strong>Nota:</strong> Esta acción es permanente y no se puede deshacer.</p>
+    <div id="lang-selector">
+        <button class="btn btn-sm btn-outline-secondary" onclick="changeLang('es')">ES</button>
+        <button class="btn btn-sm btn-outline-secondary" onclick="changeLang('en')">EN</button>
     </div>
+
+    <section id="delete-account" class="container d-flex justify-content-center align-items-center" style="min-height: 100vh">
+        <div class="row w-100 justify-content-center">
+            <div class="col-12 col-md-8">
+                <h1 id="main-title" class="text-center mb-3"></h1>
+                <h5 id="main-subtitle" class="text-center text-muted mb-4"></h5>
+                
+                <div class="stepper">
+                    <div class="step-indicator" id="step-indicator">
+                        <div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+
+                    <div id="step-content">
+                        <h3 class="step-title" id="current-step-title"></h3>
+                        <p class="step-description" id="current-step-desc"></p>
+                    </div>
+
+                    <div class="step-controls">
+                        <button class="step-button" id="prevButton"></button>
+                        <button class="step-button" id="nextButton"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const i18n = {
+            es: {
+                title: "ELIMINAR CUENTA <b>BeStrong</b>",
+                subtitle: "Sigue estos pasos para eliminar tu cuenta de manera permanente:",
+                next: "Siguiente",
+                prev: "Anterior",
+                finish: "Finalizar",
+                alert: "Proceso finalizado. Ahora puedes realizar la acción dentro de la aplicación BeStrong.",
+                steps: [
+                    { t: "Paso 1: Inicia sesión", d: "Accede a tu cuenta iniciando sesión en la aplicación móvil." },
+                    { t: "Paso 2: Accede a tu perfil", d: "Dirígete a la pestaña de perfil en el menú inferior." },
+                    { t: "Paso 3: Menú de Ajustes", d: "Toca el icono de configuración o de usuario en la parte superior." },
+                    { t: "Paso 4: Opción de Eliminación", d: "Desplázate al final de la lista hasta encontrar 'Eliminar cuenta'." },
+                    { t: "Paso 5: Confirmación", d: "Lee la advertencia y confirma que deseas borrar todos tus datos." },
+                    { t: "Paso 6: Finalizar", d: "Confirma por última vez. Tu información se borrará de forma inmediata." }
+                ]
+            },
+            en: {
+                title: "DELETE <b>BeStrong</b> ACCOUNT",
+                subtitle: "Follow these steps to permanently delete your account:",
+                next: "Next",
+                prev: "Previous",
+                finish: "Finish",
+                alert: "Process finished. You can now complete the action within the BeStrong app.",
+                steps: [
+                    { t: "Step 1: Log in", d: "Access your account by logging into the mobile application." },
+                    { t: "Step 2: Go to profile", d: "Head to the profile tab in the bottom navigation menu." },
+                    { t: "Step 3: Settings Menu", d: "Tap the settings or user icon at the top of the screen." },
+                    { t: "Step 4: Deletion Option", d: "Scroll to the bottom until you find 'Delete account'." },
+                    { t: "Step 5: Confirmation", d: "Read the warning and confirm you want to delete all your data." },
+                    { t: "Step 6: Finalize", d: "Confirm one last time. Your information will be immediately erased." }
+                ]
+            }
+        };
+
+        // Detección inicial
+        let userLang = navigator.language || navigator.userLanguage;
+        let currentLang = userLang.startsWith('es') ? 'es' : 'en';
+        let currentStep = 0;
+
+        const titleEl = document.getElementById('main-title');
+        const subtitleEl = document.getElementById('main-subtitle');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const stepDescEl = document.getElementById('current-step-desc');
+        const indicator = document.getElementById('step-indicator').children;
+        const prevBtn = document.getElementById('prevButton');
+        const nextBtn = document.getElementById('nextButton');
+
+        function updateUI() {
+            const data = i18n[currentLang];
+            
+            titleEl.innerHTML = data.title;
+            subtitleEl.innerText = data.subtitle;
+            
+            // Paso actual
+            stepTitleEl.innerText = data.steps[currentStep].t;
+            stepDescEl.innerText = data.steps[currentStep].d;
+
+            // Botones
+            prevBtn.innerText = data.prev;
+            prevBtn.disabled = currentStep === 0;
+            nextBtn.innerText = currentStep === data.steps.length - 1 ? data.finish : data.next;
+
+            // Indicadores
+            Array.from(indicator).forEach((div, index) => {
+                div.className = '';
+                if (index === currentStep) div.classList.add('active');
+                if (index < currentStep) div.classList.add('completed');
+            });
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            updateUI();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < i18n[currentLang].steps.length - 1) {
+                currentStep++;
+                updateUI();
+            } else {
+                alert(i18n[currentLang].alert);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        updateUI();
+    </script>
 </body>
 </html>
