@@ -11,7 +11,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+
     <style>
         body {
             font-family: 'Figtree', sans-serif;
@@ -27,7 +27,7 @@
             background: white;
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .step-title {
@@ -107,15 +107,20 @@
         <button class="btn btn-sm btn-outline-secondary" onclick="changeLang('en')">EN</button>
     </div>
 
-    <section id="delete-account" class="container d-flex justify-content-center align-items-center" style="min-height: 100vh">
+    <section id="delete-account" class="container d-flex justify-content-center align-items-center"
+        style="min-height: 100vh">
         <div class="row w-100 justify-content-center">
             <div class="col-12 col-md-8">
                 <h1 id="main-title" class="text-center mb-3"></h1>
                 <h5 id="main-subtitle" class="text-center text-muted mb-4"></h5>
-                
+
                 <div class="stepper">
                     <div class="step-indicator" id="step-indicator">
-                        <div></div><div></div><div></div><div></div><div></div><div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
                     </div>
 
                     <div id="step-content">
@@ -144,10 +149,9 @@
                 steps: [
                     { t: "Paso 1: Inicia sesión", d: "Accede a tu cuenta iniciando sesión en la aplicación móvil." },
                     { t: "Paso 2: Accede a tu perfil", d: "Dirígete a la pestaña de perfil en el menú inferior." },
-                    { t: "Paso 3: Menú de Ajustes", d: "Toca el icono de configuración o de usuario en la parte superior." },
-                    { t: "Paso 4: Opción de Eliminación", d: "Desplázate al final de la lista hasta encontrar 'Eliminar cuenta'." },
-                    { t: "Paso 5: Confirmación", d: "Lee la advertencia y confirma que deseas borrar todos tus datos." },
-                    { t: "Paso 6: Finalizar", d: "Confirma por última vez. Tu información se borrará de forma inmediata." }
+                    { t: "Paso 3: Opción de Eliminación", d: "Desliza hacia abajo y selecciona la opción 'Eliminar cuenta'." },
+                    { t: "Paso 4: Confirmación", d: "Lee la advertencia y confirma que deseas borrar todos tus datos." },
+                    { t: "Paso 5: Finalizar", d: "Confirma por última vez. Tu información se borrará de forma inmediata." }
                 ]
             },
             en: {
@@ -160,10 +164,9 @@
                 steps: [
                     { t: "Step 1: Log in", d: "Access your account by logging into the mobile application." },
                     { t: "Step 2: Go to profile", d: "Head to the profile tab in the bottom navigation menu." },
-                    { t: "Step 3: Settings Menu", d: "Tap the settings or user icon at the top of the screen." },
-                    { t: "Step 4: Deletion Option", d: "Scroll to the bottom until you find 'Delete account'." },
-                    { t: "Step 5: Confirmation", d: "Read the warning and confirm you want to delete all your data." },
-                    { t: "Step 6: Finalize", d: "Confirm one last time. Your information will be immediately erased." }
+                    { t: "Step 3: Deletion Option", d: "Scroll down and select 'Delete account'." },
+                    { t: "Step 4: Confirmation", d: "Read the warning and confirm you want to delete all your data." },
+                    { t: "Step 5: Finalize", d: "Confirm one last time. Your information will be immediately erased." }
                 ]
             }
         };
@@ -183,10 +186,10 @@
 
         function updateUI() {
             const data = i18n[currentLang];
-            
+
             titleEl.innerHTML = data.title;
             subtitleEl.innerText = data.subtitle;
-            
+
             // Paso actual
             stepTitleEl.innerText = data.steps[currentStep].t;
             stepDescEl.innerText = data.steps[currentStep].d;
@@ -228,4 +231,5 @@
         updateUI();
     </script>
 </body>
+
 </html>
